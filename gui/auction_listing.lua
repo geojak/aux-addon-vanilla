@@ -231,6 +231,20 @@ M.search_columns = {
             return sort_util.compare(pct_a, pct_b, desc)
         end,
     },
+	{
+        title = 'Profit.\nRatio',
+        width = .07,
+        align = 'CENTER',
+        fill = function(cell, record)
+            local pvalue = record_pvalue(record)
+            cell.text:SetText(pvalue or '---')
+        end,
+        cmp = function(record_a, record_b, desc)
+            local pct_a = record_pvalue(record_a) or (desc and -aux.huge or aux.huge)
+            local pct_b = record_pvalue(record_b) or (desc and -aux.huge or aux.huge)
+            return sort_util.compare(pct_a, pct_b, desc)
+        end,
+    },
 }
 
 M.auctions_columns = {
@@ -516,6 +530,30 @@ function record_percentage(record)
             return aux.round(100 * record.unit_buyout_price / historical_value)
         end
         return nil, aux.round(100 * record.unit_bid_price / historical_value)
+    end
+end
+
+function record_pvalue(record)
+    if not record then return end
+
+	local vendor_price = 0
+	if aux.account_data.merchant_sell[record.item_id] ~= nil then 		
+			vendor_price = tonumber(aux.account_data.merchant_sell[record.item_id])
+	elseif ShaguTweaks and ShaguTweaks.SellValueDB[record.item_id] ~= nil then
+		local charges = 1
+		if info.max_item_charges(record.item_id) ~= nil then 
+			charges=info.max_item_charges(record.item_id) 
+		end
+		vendor_price = ShaguTweaks.SellValueDB[record.item_id] / charges
+	end
+	if vendor_price == 0 then return end
+
+    local historical_value = history.value(record.item_key) or 0
+    if historical_value > 0 then
+        if record.unit_buyout_price > 0 then
+            return tonumber(string.format("%.2f",(0.95 * (historical_value- record.unit_buyout_price) / vendor_price -1)))
+        end
+        return tonumber(string.format("%.2f", (0.95 * (historical_value - record.unit_bid_price) / vendor_price -1)))
     end
 end
 

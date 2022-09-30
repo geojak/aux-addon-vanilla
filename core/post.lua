@@ -75,7 +75,7 @@ function post_auction(slot, k)
 					buyout_price = max(buyout_price,0.50*tonumber(history.value(state.item_key)))
 				elseif kz_daily == 1 then
 					--start_price = max(start_price,0.91*tonumber(history.value(state.item_key
-					start_price = max(start_price,0.80*tonumber(history.value(state.item_key)))
+					start_price = max(start_price,0.50*tonumber(history.value(state.item_key)))
 				else
 					--buyout_price = max(buyout_price,0.99* tonumber(history.value(state.item_key)))
 					buyout_price = max(buyout_price,0.95* tonumber(history.value(state.item_key)))
@@ -119,7 +119,7 @@ function post_auction(slot, k)
 			
 			if disenchant.value(item_info.slot, item_info.quality, item_info.level, item_info.item_id) ~= nil then 
 				if buyout_price < 0.95 * tonumber(disenchant.value(item_info.slot, item_info.quality, item_info.level, item_info.item_id)) -30 then
-					print("AUX: autopricing recommends disenchanting!")
+					aux.print("AUX: autopricing recommends disenchanting!")
 					return stop()
 				end
 			end
@@ -127,13 +127,13 @@ function post_auction(slot, k)
 			if kz_daily == 1 and vendor_price > 0 then 
 				if tonumber(history.value(state.item_key)) < 1.35 * vendor_price 
 				or tonumber(history.market_value(state.item_key)) < 1.35 * vendor_price then
-					print("AUX: autopricing recommends vendoring!")
+					aux.print("AUX: autopricing recommends vendoring!")
 					return stop()
 				end
 			end
 			
 			if start_price == 0 or (kz_warn == 2 and kz_pricing == 0) then
-				print("AUX: insufficient data for autopricing!")
+				aux.print("AUX: insufficient data for autopricing!")
 				return stop()
 			end
 			
@@ -141,13 +141,13 @@ function post_auction(slot, k)
 			local silver = floor(mod(start_price, COPPER_PER_GOLD) / COPPER_PER_SILVER)
 			local copper = aux.round(mod(start_price, COPPER_PER_SILVER))
 			
-			print("bid_price: "..gold.."g "..silver.."s "..copper.."c")
+			aux.print("bid_price: "..gold.."g "..silver.."s "..copper.."c")
 			
 			gold = floor(buyout_price / COPPER_PER_GOLD)
 			silver = floor(mod(buyout_price, COPPER_PER_GOLD) / COPPER_PER_SILVER)
 			copper = aux.round(mod(buyout_price, COPPER_PER_SILVER))
 			
-			print("buyout_price: "..gold.."g "..silver.."s "..copper.."c")
+			aux.print("buyout_price: "..gold.."g "..silver.."s "..copper.."c")
 
 		end
 		
