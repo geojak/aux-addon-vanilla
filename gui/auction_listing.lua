@@ -694,7 +694,7 @@ local methods = {
             local prevRecord = records[i - 1]
             if prevRecord and record.search_signature == prevRecord.search_signature then
                 -- it's an identical auction to the previous row so increment the number of auctions
-                self.rowInfo[getn(self.rowInfo)].children[getn(self.rowInfo[getn(self.rowInfo)].children)].count = self.rowInfo[getn(self.rowInfo)].children[getn(self.rowInfo[getn(self.rowInfo)].children)].count + 1
+                self.rowInfo[getn(self.rowInfo)].children[getn(self.rowInfo[getn(self.rowInfo)].children)].count = self.rowInfo[getn(self.rowInfo)].children[getn(self.rowInfo[getn(self.rowInfo)].children)].count + record.aux_quantity
             elseif not single_item and prevRecord and record.item_key == prevRecord.item_key then
                 -- it's the same base item as the previous row so insert a new auction
                 tinsert(self.rowInfo[getn(self.rowInfo)].children, T.map('count', 1, 'record', record))

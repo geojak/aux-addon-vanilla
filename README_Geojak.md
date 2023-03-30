@@ -19,3 +19,4 @@
 19. added profit next to % at search results. profit  = 0.95 (marketvalue - price) - 0.6 * 10 * vendorprice
 the profit is supposed to tell you, how much profit you make if you bough the item at its current price and put it back into the ah at 100% market value for 10 times until it sells
 20. made the #auctions column wider so you can see better how many items you have listed in brackets
+21. made the #auctions counter display total items instead of the number of auctions ingoring, that means a stack of 20 runecloth gets counteed as 20 and not 1 and 20 single stacks of runecloth get also counted as 20.
