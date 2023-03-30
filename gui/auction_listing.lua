@@ -88,7 +88,7 @@ M.search_columns = {
     },
     {
         title = 'Auctions',
-        width = .06,
+        width = .075,
         align = 'CENTER',
         fill = function(cell, record, count, own, expandable)
             local numAuctionsText = expandable and aux.color.link(count) or count
@@ -232,17 +232,23 @@ M.search_columns = {
         end,
     },
 	{
-        title = 'Profit.\nRatio',
-        width = .07,
+        title = 'Profit',
+        width = .125,
         align = 'CENTER',
         fill = function(cell, record)
             local pvalue = record_pvalue(record)
-            cell.text:SetText(pvalue or '---')
+            cell.text:SetText(pvalue > 0 and money.to_string(pvalue, true) or '---')
         end,
         cmp = function(record_a, record_b, desc)
-            local pct_a = record_pvalue(record_a) or (desc and -aux.huge or aux.huge)
-            local pct_b = record_pvalue(record_b) or (desc and -aux.huge or aux.huge)
-            return sort_util.compare(pct_a, pct_b, desc)
+            local profit_a = record_pvalue(record_a) or (desc and -aux.huge or aux.huge)
+            local profit_b = record_pvalue(record_b) or (desc and -aux.huge or aux.huge)
+			if record_a.unit_buyout_price <= 0 and record_a.high_bidder then
+				profit_a = desc and -aux.huge or aux.huge
+			end
+			if record_b.unit_buyout_price <= 0 and record_b.high_bidder then
+				profit_b = desc and -aux.huge or aux.huge
+			end
+            return sort_util.compare(profit_a, profit_b, desc)
         end,
     },
 }
@@ -546,14 +552,12 @@ function record_pvalue(record)
 		end
 		vendor_price = ShaguTweaks.SellValueDB[record.item_id] / charges
 	end
-	if vendor_price == 0 then return end
-
     local historical_value = history.value(record.item_key) or 0
     if historical_value > 0 then
         if record.unit_buyout_price > 0 then
-            return tonumber(string.format("%.2f",(0.95 * (historical_value- record.unit_buyout_price) / vendor_price -1)))
+            return tonumber(string.format("%.2f",(0.95 * (historical_value- record.unit_buyout_price) - vendor_price * 0.6 * 10)))
         end
-        return tonumber(string.format("%.2f", (0.95 * (historical_value - record.unit_bid_price) / vendor_price -1)))
+        return tonumber(string.format("%.2f",(0.95 * (historical_value- record.unit_bid_price) - vendor_price * 0.6 * 10)))
     end
 end
 

@@ -124,9 +124,8 @@ function post_auction(slot, k)
 				end
 			end
 			
-			if kz_daily == 1 and vendor_price > 0 then 
-				if tonumber(history.value(state.item_key)) < 1.35 * vendor_price 
-				or tonumber(history.market_value(state.item_key)) < 1.35 * vendor_price then
+			if vendor_price > 0 then 
+				if start_price < 1.35 * vendor_price then
 					aux.print("AUX: autopricing recommends vendoring!")
 					return stop()
 				end

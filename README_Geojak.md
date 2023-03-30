@@ -16,7 +16,6 @@
 16. adjusted the auto pricing to not post items and instead pprint a warning if it things its not profitable
 17. percentage pricing, do 1g 10s 50% or 100% 50s which will calc a price as max( % * market_value, gold silver copper), the calc vlaue is then saved
 18. if you use the aux post bid mode, then clicking a buyout to undercut will not adjust the starting bid price aswell
-19. added profit ratio next to % at search results. profit ratios = 0.95 (marketvalue - price) / vendorprice (or 1 if no vendor price)
-the profit ratio is supposed to tell you, if you bough the item at its current price and put it back into the ah at 100% market value
-then if you sell it before putting the item the "profit ratio" times into the ah, then you make a profit
-another interpretation is, that selling it at market value you get "profit ratios" times the vendor price
+19. added profit next to % at search results. profit  = 0.95 (marketvalue - price) - 0.6 * 10 * vendorprice
+the profit is supposed to tell you, how much profit you make if you bough the item at its current price and put it back into the ah at 100% market value for 10 times until it sells
+20. made the #auctions column wider so you can see better how many items you have listed in brackets
